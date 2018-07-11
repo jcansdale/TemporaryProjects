@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="TemporaryProjects.2401a73f-ebe1-44b0-8a1f-4456ee9fecbe" Version="1.0" Language="en-US" Publisher="Jamie Cansdale" />
+        <Identity Id="TemporaryProjects.2401a73f-ebe1-44b0-8a1f-4456ee9fecbe" Version="0.1" Language="en-US" Publisher="Jamie Cansdale" />
         <DisplayName>TemporaryProjects</DisplayName>
         <Description xml:space="preserve">Add `File &gt; New &gt; Temporary Project...` command to create a projects in a temporary directory.</Description>
         <MoreInfo>https://github.com/jcansdale/TemporaryProjects</MoreInfo>
