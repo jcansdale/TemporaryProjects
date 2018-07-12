@@ -12,3 +12,7 @@ The default project location will have `Temp\yyyy-MM-dd\` appended to it. This w
 
 You can find the latest release here:
 https://github.com/jcansdale/TemporaryProjects/releases
+
+### Compatability
+
+Works with Visual Studio 2015 and 2017.
