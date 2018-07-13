@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "TemporaryProjects": {
+      "commandName": "Executable",
+      "executablePath": "$(StartProgram)",
+      "commandLineArgs": "$(StartArguments)"
+    }
+  }
+}
