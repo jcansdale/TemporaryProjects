@@ -82,7 +82,7 @@ namespace TemporaryProjects
                     // Microsoft.VisualStudio.Shell.15.0, whereas we're referencing
                     // Microsoft.VisualStudio.Shell.14.0.
                     // Both can't be referenced at the same time so we have to use reflection as a workaround.
-                    windowPane?.GetType().GetProperty(nameof(WindowPane.Content)).GetValue(windowPane) is IVsUIWpfElement wpfElement &&
+                    (windowPane as dynamic).Content is IVsUIWpfElement wpfElement &&
                     ErrorHandler.Succeeded(wpfElement.GetFrameworkElement(out var element)) &&
                     element is FrameworkElement frameworkElement &&
                     frameworkElement.FindName("ContentHost") is Decorator contentHost)
