@@ -150,7 +150,8 @@ namespace TemporaryProjects
 
                 base.OnClick();
 
-                NewTempProjectCommand.Execute(dte);
+                object _ = null;
+                dte.Commands.Raise(NewTempProjectCommand.CommandSet.ToString("B"), NewTempProjectCommand.CommandId, _, _);
             }
         }
     }

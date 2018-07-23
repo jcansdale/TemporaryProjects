@@ -35,7 +35,7 @@ namespace TemporaryProjects
         // You can test this command in the current VS instance like this:
         // https://github.com/jcansdale/TestDriven.Net-Issues/wiki/Test-With...VS-SDK
         [STAThread]
-        public static void Execute(DTE dte)
+        static void Execute(DTE dte)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
