@@ -77,6 +77,11 @@ namespace TemporaryProjects
                 if (ErrorHandler.Succeeded(frame.GetGuidProperty((int)__VSFPROPID.VSFPROPID_GuidPersistenceSlot, out var guid)) &&
                     guid == VSConstants.StandardToolWindows.StartPage &&
                     ErrorHandler.Succeeded(frame.GetProperty((int)__VSFPROPID.VSFPROPID_DocView, out var windowPane)) &&
+                    // The type of windowPane is Microsoft.VisualStudio.Shell.ToolWindowPane (which inherits from WindowPane),
+                    // but if we tried to cast it, the cast would fail at runtime in VS 2017 where the real type comes from
+                    // Microsoft.VisualStudio.Shell.15.0, whereas we're referencing
+                    // Microsoft.VisualStudio.Shell.14.0.
+                    // Both can't be referenced at the same time so we have to use reflection as a workaround.
                     windowPane?.GetType().GetProperty(nameof(WindowPane.Content)).GetValue(windowPane) is IVsUIWpfElement wpfElement &&
                     ErrorHandler.Succeeded(wpfElement.GetFrameworkElement(out var element)) &&
                     element is FrameworkElement frameworkElement &&
