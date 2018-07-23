@@ -31,8 +31,8 @@ namespace TemporaryProjects
 
             this.dte = dte;
 
-            var guid = VSConstants.StandardToolWindows.StartPage;
-            if (ErrorHandler.Succeeded(vsUIShell.FindToolWindow((uint)__VSFINDTOOLWIN.FTW_fFrameOnly, ref guid, out var windowFrame)) &&
+            if (ErrorHandler.Succeeded(vsUIShell.FindToolWindow(
+                    (uint)__VSFINDTOOLWIN.FTW_fFrameOnly, VSConstants.StandardToolWindows.StartPage, out var windowFrame)) &&
                 windowFrame != null)
             {
                 TrackFrame(windowFrame);
@@ -150,8 +150,7 @@ namespace TemporaryProjects
 
                 base.OnClick();
 
-                object _ = null;
-                dte.Commands.Raise(NewTempProjectCommand.CommandSet.ToString("B"), NewTempProjectCommand.CommandId, _, _);
+                dte.Commands.Raise(NewTempProjectCommand.CommandSet.ToString("B"), NewTempProjectCommand.CommandId, null, null);
             }
         }
     }
