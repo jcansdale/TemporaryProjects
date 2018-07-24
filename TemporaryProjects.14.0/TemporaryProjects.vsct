@@ -29,6 +29,11 @@
   <Symbols>
     <!-- This is the package guid. -->
     <GuidSymbol name="guidNewTempProjectCommandPackage" value="{5abd62ee-e60e-45a5-bd01-9c873436490f}" />
+    <GuidSymbol name="startPageExtenderPackage14" value="{4192762b-3595-46c9-96ea-09da3040410b}" />
+    <GuidSymbol name="startPageExtenderPackage15" value="{b8b15330-3b25-47b9-a366-3306df6ee459}" />
+
+    <!-- This is the PersistenceSlot for the StartPage tool window -->
+    <GuidSymbol name="startPageToolWindow" value="{387cb18d-6153-4156-9257-9ac3f9207bbe}" />
 
     <!-- This is the guid used to group the menu commands together -->
     <GuidSymbol name="guidNewTempProjectCommandPackageCmdSet" value="{f5e2d15e-a980-4a05-81ec-fda9c6f91a9c}">

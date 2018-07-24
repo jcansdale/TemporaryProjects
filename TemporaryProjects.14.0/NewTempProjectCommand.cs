@@ -11,14 +11,11 @@ namespace TemporaryProjects
     {
         readonly DTE dte;
 
-        public const int CommandId = 0x0100;
-        public static readonly Guid CommandSet = new Guid("f5e2d15e-a980-4a05-81ec-fda9c6f91a9c");
-
         private NewTempProjectCommand(IMenuCommandService commandService, DTE dte)
         {
             this.dte = dte;
 
-            var menuCommandID = new CommandID(CommandSet, CommandId);
+            var menuCommandID = new CommandID(PackageGuids.guidNewTempProjectCommandPackageCmdSet, PackageIds.NewTempProjectCommandId);
             var menuItem = new MenuCommand((s, e) => Execute(dte), menuCommandID);
             commandService.AddCommand(menuItem);
         }

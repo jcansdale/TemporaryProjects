@@ -55,8 +55,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\TemporaryProjects.14.0\NewTempProjectCommandPackage.vsct.cs">
-      <Link>NewTempProjectCommandPackage.vsct.cs</Link>
+    <Compile Include="..\TemporaryProjects.14.0\TemporaryProjects.cs">
+      <Link>TemporaryProjects.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StartPageExtender.cs" />

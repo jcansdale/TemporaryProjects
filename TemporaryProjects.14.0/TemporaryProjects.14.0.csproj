@@ -56,22 +56,23 @@
   <ItemGroup>
     <Compile Include="NewTempProjectCommand.cs" />
     <Compile Include="NewTempProjectCommandPackage.cs" />
-    <Compile Include="NewTempProjectCommandPackage.vsct.cs">
+    <Compile Include="TemporaryProjects.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>NewTempProjectCommandPackage.vsct</DependentUpon>
+      <DependentUpon>TemporaryProjects.vsct</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StartPageExtenderPackage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />
   </ItemGroup>
   <ItemGroup>
-    <VSCTCompile Include="NewTempProjectCommandPackage.vsct">
+    <VSCTCompile Include="TemporaryProjects.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
       <SubType>Designer</SubType>
       <Generator>VsctGenerator</Generator>
-      <LastGenOutput>NewTempProjectCommandPackage1.cs</LastGenOutput>
+      <LastGenOutput>TemporaryProjects.cs</LastGenOutput>
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
