@@ -155,7 +155,7 @@ namespace TemporaryProjects
 
                 base.OnClick();
 
-                dte.Commands.Raise(NewTempProjectCommand.CommandSet.ToString("B"), NewTempProjectCommand.CommandId, null, null);
+                dte.Commands.Raise(PackageGuids.guidNewTempProjectCommandPackageCmdSetString, PackageIds.NewTempProjectCommandId, null, null);
             }
         }
     }
