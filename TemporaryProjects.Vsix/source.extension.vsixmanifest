@@ -16,7 +16,6 @@
     </Dependencies>
     <Assets>
         <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="TemporaryProjects.14.0" Path="|TemporaryProjects.14.0;PkgdefProjectOutputGroup|" />
-        <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="TemporaryProjects.15.0" Path="|TemporaryProjects.15.0;PkgdefProjectOutputGroup|" />
     </Assets>
     <Prerequisites>
         <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,16.0)" DisplayName="Visual Studio core editor" />

@@ -22,7 +22,15 @@ namespace TemporaryProjects
             var dte = (DTE)await package.GetServiceAsync(typeof(DTE));
             var vsUIShell = (IVsUIShell)await package.GetServiceAsync(typeof(SVsUIShell));
 
-            ((IVsUIShell7)vsUIShell).AdviseWindowFrameEvents(new StartPageExtender(dte, vsUIShell));
+            switch (dte.Version)
+            {
+                case "14.0":
+                    // Doesn't work with Visual Studio 2015
+                    break;
+                case "15.0":
+                    ((IVsUIShell7)vsUIShell).AdviseWindowFrameEvents(new StartPageExtender(dte, vsUIShell));
+                    break;
+            }
         }
 
         private StartPageExtender(DTE dte, IVsUIShell vsUIShell)

@@ -12,14 +12,12 @@ namespace TemporaryProjects
     /// </summary>
     internal sealed partial class PackageGuids
     {
-        public const string guidNewTempProjectCommandPackageString = "5abd62ee-e60e-45a5-bd01-9c873436490f";
-        public const string startPageExtenderPackage14String = "4192762b-3595-46c9-96ea-09da3040410b";
-        public const string startPageExtenderPackage15String = "b8b15330-3b25-47b9-a366-3306df6ee459";
+        public const string newTempProjectCommandPackageString = "5abd62ee-e60e-45a5-bd01-9c873436490f";
+        public const string startPageExtenderPackageString = "4192762b-3595-46c9-96ea-09da3040410b";
         public const string startPageToolWindowString = "387cb18d-6153-4156-9257-9ac3f9207bbe";
         public const string guidNewTempProjectCommandPackageCmdSetString = "f5e2d15e-a980-4a05-81ec-fda9c6f91a9c";
-        public static Guid guidNewTempProjectCommandPackage = new Guid(guidNewTempProjectCommandPackageString);
-        public static Guid startPageExtenderPackage14 = new Guid(startPageExtenderPackage14String);
-        public static Guid startPageExtenderPackage15 = new Guid(startPageExtenderPackage15String);
+        public static Guid newTempProjectCommandPackage = new Guid(newTempProjectCommandPackageString);
+        public static Guid startPageExtenderPackage = new Guid(startPageExtenderPackageString);
         public static Guid startPageToolWindow = new Guid(startPageToolWindowString);
         public static Guid guidNewTempProjectCommandPackageCmdSet = new Guid(guidNewTempProjectCommandPackageCmdSetString);
     }

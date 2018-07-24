@@ -52,12 +52,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TemporaryProjects.15.0\TemporaryProjects.15.0.csproj">
-      <Project>{EFB146A5-645B-410E-A4AF-F3552A5EA0AA}</Project>
-      <Name>TemporaryProjects.15.0</Name>
-      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3bPkgdefProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
-    </ProjectReference>
     <ProjectReference Include="..\TemporaryProjects.14.0\TemporaryProjects.14.0.csproj">
       <Project>{36F01D35-AFD4-4144-BD1B-A01689801FFA}</Project>
       <Name>TemporaryProjects.14.0</Name>
