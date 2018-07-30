@@ -12,7 +12,6 @@ namespace TemporaryProjects
 {
     internal sealed class StartPageExtender : IVsWindowFrameEvents
     {
-        private readonly HashSet<IVsWindowFrame> trackedFrames = new HashSet<IVsWindowFrame>();
         private readonly DTE dte;
 
         public static async Task InitializeAsync(AsyncPackage package)
@@ -46,16 +45,14 @@ namespace TemporaryProjects
 
         public void OnFrameCreated(IVsWindowFrame frame)
         {
-            // The frame for the start page is created empty, so instead of doing any work here,
-            // we wait until the frame is first activated using OnActiveFrameChanged (at which point it will have content)
-            // and then add it to a set of tracked frames to make sure we only modify it once.
+            // When the frame for the start page is created, it is empty and has no content. Not only that, but
+            // the content of the frame seems to be recreated every time the frame is activated, so we have to
+            // extend its content on activation. This may happen multiple times with the same frame. If we only
+            // did this once, our button would be gone if the user switched to another tab and then back to the start page.
         }
 
         public void OnFrameDestroyed(IVsWindowFrame frame)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-
-            trackedFrames.Remove(frame);
         }
 
         public void OnFrameIsVisibleChanged(IVsWindowFrame frame, bool newIsVisible)
@@ -80,23 +77,20 @@ namespace TemporaryProjects
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            if (trackedFrames.Add(frame))
+            if (ErrorHandler.Succeeded(frame.GetGuidProperty((int)__VSFPROPID.VSFPROPID_GuidPersistenceSlot, out var guid)) &&
+                guid == VSConstants.StandardToolWindows.StartPage &&
+                ErrorHandler.Succeeded(frame.GetProperty((int)__VSFPROPID.VSFPROPID_DocView, out var windowPane)) &&
+                // The type of windowPane is Microsoft.VisualStudio.Shell.ToolWindowPane (which inherits from WindowPane),
+                // but if we tried to cast it, the cast would fail at runtime in VS 2017 where the real type comes from
+                // Microsoft.VisualStudio.Shell.15.0, whereas we're referencing
+                // Microsoft.VisualStudio.Shell.14.0.
+                // Both can't be referenced at the same time so we have to use dynamic as a workaround.
+                (windowPane as dynamic).Content is IVsUIWpfElement wpfElement &&
+                ErrorHandler.Succeeded(wpfElement.GetFrameworkElement(out var element)) &&
+                element is FrameworkElement frameworkElement &&
+                frameworkElement.FindName("ContentHost") is Decorator contentHost)
             {
-                if (ErrorHandler.Succeeded(frame.GetGuidProperty((int)__VSFPROPID.VSFPROPID_GuidPersistenceSlot, out var guid)) &&
-                    guid == VSConstants.StandardToolWindows.StartPage &&
-                    ErrorHandler.Succeeded(frame.GetProperty((int)__VSFPROPID.VSFPROPID_DocView, out var windowPane)) &&
-                    // The type of windowPane is Microsoft.VisualStudio.Shell.ToolWindowPane (which inherits from WindowPane),
-                    // but if we tried to cast it, the cast would fail at runtime in VS 2017 where the real type comes from
-                    // Microsoft.VisualStudio.Shell.15.0, whereas we're referencing
-                    // Microsoft.VisualStudio.Shell.14.0.
-                    // Both can't be referenced at the same time so we have to use dynamic as a workaround.
-                    (windowPane as dynamic).Content is IVsUIWpfElement wpfElement &&
-                    ErrorHandler.Succeeded(wpfElement.GetFrameworkElement(out var element)) &&
-                    element is FrameworkElement frameworkElement &&
-                    frameworkElement.FindName("ContentHost") is Decorator contentHost)
-                {
-                    SetupStartPage(contentHost);
-                }
+                SetupStartPage(contentHost);
             }
         }
 
