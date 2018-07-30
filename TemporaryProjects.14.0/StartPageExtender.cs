@@ -20,17 +20,14 @@ namespace TemporaryProjects
             await package.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             var dte = (DTE)await package.GetServiceAsync(typeof(DTE));
-            var vsUIShell = (IVsUIShell)await package.GetServiceAsync(typeof(SVsUIShell));
-
-            switch (dte.Version)
+            if (dte.Version == "14.0")
             {
-                case "14.0":
-                    // Doesn't work with Visual Studio 2015
-                    break;
-                case "15.0":
-                    ((IVsUIShell7)vsUIShell).AdviseWindowFrameEvents(new StartPageExtender(dte, vsUIShell));
-                    break;
+                // Doesn't work with Visual Studio 2015
+                return;
             }
+
+            var vsUIShell = (IVsUIShell)await package.GetServiceAsync(typeof(SVsUIShell));
+            ((IVsUIShell7)vsUIShell).AdviseWindowFrameEvents(new StartPageExtender(dte, vsUIShell));
         }
 
         private StartPageExtender(DTE dte, IVsUIShell vsUIShell)
