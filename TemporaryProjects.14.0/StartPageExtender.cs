@@ -102,7 +102,12 @@ namespace TemporaryProjects
 
         private void SetupStartPage(Decorator contentHost)
         {
+            // The start page loads in phases and there will usually be about 2 layout updates before our target UI is available,
+            // but it's also possible that the UI is fully loaded already, so we make a call to LayoutUpdated immediately.
+            // This will especially happen if we found it using FindToolWindow in the constructor.
+
             contentHost.LayoutUpdated += LayoutUpdated;
+            LayoutUpdated(null, null);
 
             void LayoutUpdated(object sender, EventArgs e)
             {
