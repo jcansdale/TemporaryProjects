@@ -86,7 +86,7 @@ namespace TemporaryProjects
                     // but if we tried to cast it, the cast would fail at runtime in VS 2017 where the real type comes from
                     // Microsoft.VisualStudio.Shell.15.0, whereas we're referencing
                     // Microsoft.VisualStudio.Shell.14.0.
-                    // Both can't be referenced at the same time so we have to use reflection as a workaround.
+                    // Both can't be referenced at the same time so we have to use dynamic as a workaround.
                     (windowPane as dynamic).Content is IVsUIWpfElement wpfElement &&
                     ErrorHandler.Succeeded(wpfElement.GetFrameworkElement(out var element)) &&
                     element is FrameworkElement frameworkElement &&
