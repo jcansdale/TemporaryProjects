@@ -46,6 +46,9 @@ namespace TemporaryProjects
 
         public void OnFrameCreated(IVsWindowFrame frame)
         {
+            // The frame for the start page is created empty, so instead of doing any work here,
+            // we wait until the frame is first activated using OnActiveFrameChanged (at which point it will have content)
+            // and then add it to a set of tracked frames to make sure we only modify it once.
         }
 
         public void OnFrameDestroyed(IVsWindowFrame frame)
