@@ -12,7 +12,7 @@
 
   <!--The Commands section is where commands, menus, and menu groups are defined.
       This section uses a Guid to identify the package that provides the command defined inside it. -->
-  <Commands package="guidNewTempProjectCommandPackage">
+  <Commands package="newTempProjectCommandPackage">
 
     <Buttons>
       <Button guid="guidNewTempProjectCommandPackageCmdSet" id="NewTempProjectCommandId" priority="0x0100" type="Button">
@@ -28,7 +28,11 @@
 
   <Symbols>
     <!-- This is the package guid. -->
-    <GuidSymbol name="guidNewTempProjectCommandPackage" value="{5abd62ee-e60e-45a5-bd01-9c873436490f}" />
+    <GuidSymbol name="newTempProjectCommandPackage" value="{5abd62ee-e60e-45a5-bd01-9c873436490f}" />
+    <GuidSymbol name="startPageExtenderPackage" value="{4192762b-3595-46c9-96ea-09da3040410b}" />
+
+    <!-- This is the PersistenceSlot for the StartPage tool window -->
+    <GuidSymbol name="startPageToolWindow" value="{387cb18d-6153-4156-9257-9ac3f9207bbe}" />
 
     <!-- This is the guid used to group the menu commands together -->
     <GuidSymbol name="guidNewTempProjectCommandPackageCmdSet" value="{f5e2d15e-a980-4a05-81ec-fda9c6f91a9c}">
