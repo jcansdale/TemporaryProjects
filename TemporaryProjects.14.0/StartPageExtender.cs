@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using EnvDTE;
@@ -46,8 +45,8 @@ namespace TemporaryProjects
         public void OnFrameCreated(IVsWindowFrame frame)
         {
             // When the frame for the start page is created, it is empty and has no content. Not only that, but
-            // the content of the frame seems to be recreated every time the frame is activated, so we have to
-            // extend its content on activation. This may happen multiple times with the same frame. If we only
+            // the content of the frame seems to be recreated every time the tab is activated, so we have to
+            // extend its content in OnFrameIsOnScreenChanged. This may happen multiple times with the same frame. If we only
             // did this once, our button would be gone if the user switched to another tab and then back to the start page.
         }
 
@@ -61,16 +60,29 @@ namespace TemporaryProjects
 
         public void OnFrameIsOnScreenChanged(IVsWindowFrame frame, bool newIsOnScreen)
         {
+            // If you try to make any improvements here, please make sure not only that the button is visible
+            // when the start page is opened, but also:
+            // 1. When the user switches to another tab and back to the start page
+            // 2. When the start page is undocked by dragging the tab
+            // 3. When the start page is docked again (this currently *doesn't* work)
+            // 4. The button is never duplicated, for example when switching focus to a different tool window and back
+
+            // I've tried many approaches such as doing this in OnFrameIsVisibleChanged, OnActiveFrameChanged,
+            // IVsWindowFrameNotify.OnShow using IVsWindowFrame2.Advise and even DTE.Events.WindowEvents.
+            // With all of these approaches there are cases where the button is not recreated because the event is not fired,
+            // and in some cases it's even fired twice. The current solution is a compromise - the common case works and
+            // undocking the start page is presumably not that common.
+
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            if (newIsOnScreen)
+            {
+                TrackFrame(frame);
+            }
         }
 
         public void OnActiveFrameChanged(IVsWindowFrame oldFrame, IVsWindowFrame newFrame)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-
-            if (newFrame != null && oldFrame != newFrame)
-            {
-                TrackFrame(newFrame);
-            }
         }
 
         private void TrackFrame(IVsWindowFrame frame)
