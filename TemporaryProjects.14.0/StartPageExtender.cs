@@ -5,27 +5,33 @@ using EnvDTE;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Task = System.Threading.Tasks.Task;
 
 namespace TemporaryProjects
 {
     internal sealed class StartPageExtender : IVsWindowFrameEvents
     {
         private readonly DTE dte;
+        private const string CookieName = "TemporaryProjects.StartPageExtender.Cookie";
 
-        public static async Task InitializeAsync(AsyncPackage package)
+        // You can test this in the current Visual Studio instance like this:
+        // https://github.com/jcansdale/TestDriven.Net-Issues/wiki/Test-With...VS-SDK
+        [STAThread]
+        public static void Initialize(IVsUIShell7 vsUIShell, DTE dte)
         {
-            await package.JoinableTaskFactory.SwitchToMainThreadAsync();
+            ThreadHelper.ThrowIfNotOnUIThread();
 
-            var dte = (DTE)await package.GetServiceAsync(typeof(DTE));
-            if (dte.Version == "14.0")
+            if (Cookie is uint cookie)
             {
-                // Doesn't work with Visual Studio 2015
-                return;
+                vsUIShell.UnadviseWindowFrameEvents(cookie);
             }
 
-            var vsUIShell = (IVsUIShell)await package.GetServiceAsync(typeof(SVsUIShell));
-            ((IVsUIShell7)vsUIShell).AdviseWindowFrameEvents(new StartPageExtender(dte, vsUIShell));
+            Cookie = vsUIShell.AdviseWindowFrameEvents(new StartPageExtender(dte, (IVsUIShell)vsUIShell));
+        }
+
+        static uint? Cookie
+        {
+            get => (uint?)AppDomain.CurrentDomain.GetData(CookieName);
+            set => AppDomain.CurrentDomain.SetData(CookieName, value);
         }
 
         private StartPageExtender(DTE dte, IVsUIShell vsUIShell)
