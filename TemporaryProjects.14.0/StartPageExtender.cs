@@ -18,16 +18,24 @@ namespace TemporaryProjects
         [STAThread]
         public static void Initialize(IVsUIShell7 vsUIShell, DTE dte)
         {
+            ReadviseWindowFrameEvents(vsUIShell, dte);
+        }
+
+        private static void ReadviseWindowFrameEvents(IVsUIShell7 vsUIShell, DTE dte)
+        {
             ThreadHelper.ThrowIfNotOnUIThread();
 
             if (Cookie is uint cookie)
             {
+                // Ensure that we only have one event sink installed for the app domain if initialize is called
+                // multiple times while testing.
                 vsUIShell.UnadviseWindowFrameEvents(cookie);
             }
 
             Cookie = vsUIShell.AdviseWindowFrameEvents(new StartPageExtender(dte, (IVsUIShell)vsUIShell));
         }
 
+        // Store cookie in app domain wide variable because assembly might be loaded multiple times while testing.
         static uint? Cookie
         {
             get => (uint?)AppDomain.CurrentDomain.GetData(CookieName);
