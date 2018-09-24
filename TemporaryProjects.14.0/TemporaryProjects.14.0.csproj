@@ -58,6 +58,8 @@
   <ItemGroup>
     <Compile Include="NewTempProjectCommand.cs" />
     <Compile Include="NewTempProjectCommandPackage.cs" />
+    <Compile Include="StartPageExtender.cs" />
+    <Compile Include="StartPageExtenderPackage.cs" />
     <Compile Include="TemporaryProjects.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
