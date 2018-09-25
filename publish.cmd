@@ -1,3 +1,4 @@
+@set personalAccessToken=%~1
 @set VSInstallDir=%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Enterprise
 @set path="%VSInstallDir%\VSSDK\VisualStudioIntegration\Tools\Bin";%path%
 VsixPublisher login -publisherName JamieCansdale -personalAccessToken %personalAccessToken%
