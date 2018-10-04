@@ -17,4 +17,4 @@ param (
 	[string] $publishManifest = "$PSScriptRoot\publishManifest.json"
 )
 
-& $PSScriptRoot\Publish-Vsix.ps1 -WhatIf:$WhatIf -Confirm:$Confirm -publisherName:$publisherName -personalAccessToken:$personalAccessToken -payload:$payload -publishManifest:$publishManifest
+& $PSScriptRoot\Publish-Vsix.ps1 -WhatIf:([bool]$WhatIfPreference.IsPresent) -publisherName:$publisherName -personalAccessToken:$personalAccessToken -payload:$payload -publishManifest:$publishManifest
