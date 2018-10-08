@@ -105,7 +105,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-  </ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning">
+      <Version>2.2.13</Version>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>  </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\NewTempProjectCommandPackage.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
