@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.VisualStudio.Shell;
@@ -17,18 +16,15 @@ namespace TemporaryProjects
     {
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
-            if (VsVersion < 15)
+            if (Utilities.VsVersion < 15)
             {
                 // Doesn't work with Visual Studio 2015
                 return;
             }
 
             await JoinableTaskFactory.SwitchToMainThreadAsync();
-            var dte = (EnvDTE.DTE)await GetServiceAsync(typeof(EnvDTE.DTE));
             var vsUIShell = (IVsUIShell7)await GetServiceAsync(typeof(SVsUIShell));
-            StartPageExtender.Initialize(vsUIShell, dte);
+            StartPageExtender.Initialize(vsUIShell);
         }
-
-        static int VsVersion => Process.GetCurrentProcess().MainModule.FileVersionInfo.FileMajorPart;
     }
 }

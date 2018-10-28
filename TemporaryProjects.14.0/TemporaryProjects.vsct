@@ -27,9 +27,10 @@
   </Commands>
 
   <Symbols>
-    <!-- This is the package guid. -->
+    <!-- These are the package guids. -->
     <GuidSymbol name="newTempProjectCommandPackage" value="{5abd62ee-e60e-45a5-bd01-9c873436490f}" />
     <GuidSymbol name="startPageExtenderPackage" value="{4192762b-3595-46c9-96ea-09da3040410b}" />
+    <GuidSymbol name="getToCodeExtenderPackage" value="{25f9a43d-c98c-45f1-9741-cc423c1ef5ea}" />
 
     <!-- This is the PersistenceSlot for the StartPage tool window -->
     <GuidSymbol name="startPageToolWindow" value="{387cb18d-6153-4156-9257-9ac3f9207bbe}" />
