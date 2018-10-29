@@ -12,9 +12,19 @@ namespace TemporaryProjects
 {
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(PackageGuids.getToCodeExtenderPackageString)]
-    [ProvideAutoLoad(UIContextGuids.NoSolution, PackageAutoLoadFlags.BackgroundLoad)]
+    [ProvideAutoLoad(getToCodeUIContext,PackageAutoLoadFlags.BackgroundLoad)]
+    [ProvideUIContextRule(getToCodeUIContext,
+        name: "GetToCodePackageExists",
+        expression: "GetToCodePackageExists",
+        termNames: new[] { "GetToCodePackageExists" },
+        termValues: new[]
+        {
+            @"ConfigSettingsStoreQuery:Packages\{D208A515-B37C-4F88-AC23-F3727FE307BD}\AllowsBackgroundLoad"
+        })]
     public sealed class GetToCodeExtenderPackage : AsyncPackage
     {
+        const string getToCodeUIContext = "A6C01F2B-9CCB-4F06-9F82-D1835720CCFF";
+
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
             if (Utilities.VsVersion < 16)
