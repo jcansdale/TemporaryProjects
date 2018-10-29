@@ -1,6 +1,9 @@
 ﻿#pragma warning disable VSSDK004 // Use PackageAutoLoadFlags.None so we load ASAP!
 
+using EnvDTE;
+using Microsoft;
 using Microsoft.VisualStudio.Imaging;
+using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
 using System;
 using System.ComponentModel;
@@ -55,9 +58,8 @@ namespace TemporaryProjects
                     var newAction = types.GetToCodeAction_Constructor.Invoke(new object[]
                     {
                         KnownMonikers.NewTestGroup,
-                        "Create a new temporary project",
-                        "",
-                        new NewTempProjectUiCommand()
+                        "Create a new temporary project", "Bing bada bing!",
+                        new DelegateCommand(_ => OnOpenTempProjectCommandExecuted(types, currentWorkflow), _ => true)
                     });
 
                     var currentActions = (object[])types.GetToCodeWorkflowViewModel_Actions.GetValue(currentWorkflow);
@@ -69,6 +71,17 @@ namespace TemporaryProjects
                     types.GetToCodeWorkflowViewModel_NotifyPropertyChanged.Invoke(currentWorkflow, new object[] { types.GetToCodeWorkflowViewModel_Actions.Name });
                 }
             }
+        }
+
+        private static void OnOpenTempProjectCommandExecuted(WorkflowTypes types, object currentWorkflow)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+            var dte = ServiceProvider.GlobalProvider.GetService(typeof(DTE)) as DTE;
+            Assumes.Present(dte);
+            dte.Commands.Raise(PackageGuids.guidNewTempProjectCommandPackageCmdSetString, PackageIds.NewTempProjectCommandId, null, null);
+
+            var e = Activator.CreateInstance(types.WorkflowCompletedEventArgs, "Get To Code workflow", "After open solution");
+            types.GetToCodeWorkflowViewModel_RaiseCompleted.Invoke(currentWorkflow, new object[] { e });
         }
     }
 }
