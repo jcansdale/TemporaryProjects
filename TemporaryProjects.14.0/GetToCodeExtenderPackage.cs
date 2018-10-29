@@ -1,18 +1,17 @@
-﻿using Microsoft.VisualStudio.Imaging;
+﻿#pragma warning disable VSSDK004 // Use PackageAutoLoadFlags.None so we load ASAP!
+
+using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows;
-using Task = System.Threading.Tasks.Task;
 
 namespace TemporaryProjects
 {
-    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
+    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = false)]
     [Guid(PackageGuids.getToCodeExtenderPackageString)]
-    [ProvideAutoLoad(getToCodeUIContext,PackageAutoLoadFlags.BackgroundLoad)]
+    [ProvideAutoLoad(getToCodeUIContext, PackageAutoLoadFlags.None)]
     [ProvideUIContextRule(getToCodeUIContext,
         name: "GetToCodePackageExists",
         expression: "GetToCodePackageExists",
@@ -21,11 +20,11 @@ namespace TemporaryProjects
         {
             @"ConfigSettingsStoreQuery:Packages\{D208A515-B37C-4F88-AC23-F3727FE307BD}\AllowsBackgroundLoad"
         })]
-    public sealed class GetToCodeExtenderPackage : AsyncPackage
+    public sealed class GetToCodeExtenderPackage : Package
     {
         const string getToCodeUIContext = "A6C01F2B-9CCB-4F06-9F82-D1835720CCFF";
 
-        protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
+        protected override void Initialize()
         {
             if (Utilities.VsVersion < 16)
                 return;
@@ -33,8 +32,6 @@ namespace TemporaryProjects
             var types = new WorkflowTypes();
             if (!types.Succeeded)
                 return;
-
-            await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
             var window = (FrameworkElement)types.WorkflowHostView_Instance.GetValue(null);
             window.Height += 32;
