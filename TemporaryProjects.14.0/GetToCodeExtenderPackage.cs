@@ -79,8 +79,11 @@ namespace TemporaryProjects
 
         private static void CloseWorkflow(WorkflowTypes types, object currentWorkflow)
         {
-            var e = Activator.CreateInstance(types.WorkflowCompletedEventArgs, "Get To Code workflow", "After open solution");
-            types.GetToCodeWorkflowViewModel_RaiseCompleted.Invoke(currentWorkflow, new object[] { e });
+            if (KnownUIContexts.SolutionExistsContext.IsActive)
+            {
+                var e = Activator.CreateInstance(types.WorkflowCompletedEventArgs, "Get To Code workflow", "After open solution");
+                types.GetToCodeWorkflowViewModel_RaiseCompleted.Invoke(currentWorkflow, new object[] { e });
+            }
         }
     }
 }
