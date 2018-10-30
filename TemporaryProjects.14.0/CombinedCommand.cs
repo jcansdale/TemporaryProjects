@@ -8,7 +8,13 @@ namespace TemporaryProjects
     {
         private readonly ICommand[] commands;
 
-        public CombinedCommand(params ICommand[] commands) => this.commands = commands;
+        public CombinedCommand(params ICommand[] commands)
+        {
+            this.commands = commands;
+
+            foreach (var command in commands)
+                CanExecuteChangedEventManager.AddHandler(command, (s, e) => CanExecuteChanged?.Invoke(this, e));
+        }
 
         public event EventHandler CanExecuteChanged;
 
