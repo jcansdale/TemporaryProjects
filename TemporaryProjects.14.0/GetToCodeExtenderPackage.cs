@@ -63,7 +63,7 @@ namespace TemporaryProjects
                     {
                         KnownMonikers.NewTestGroup,
                         "Create a new temporary project", "",
-                        new DelegateCommand(_ => OnOpenTempProjectCommandExecuted(types, currentWorkflow), _ => true)
+                        new CombinedCommand(new NewTempProjectUiCommand(), new DelegateCommand(_ => CloseWorkflow(types, currentWorkflow), _ => true))
                     });
 
                     var currentActions = (object[])types.GetToCodeWorkflowViewModel_Actions.GetValue(currentWorkflow);
@@ -77,13 +77,8 @@ namespace TemporaryProjects
             }
         }
 
-        private static void OnOpenTempProjectCommandExecuted(WorkflowTypes types, object currentWorkflow)
+        private static void CloseWorkflow(WorkflowTypes types, object currentWorkflow)
         {
-            ThreadHelper.ThrowIfNotOnUIThread();
-            var dte = ServiceProvider.GlobalProvider.GetService(typeof(DTE)) as DTE;
-            Assumes.Present(dte);
-            dte.Commands.Raise(PackageGuids.guidNewTempProjectCommandPackageCmdSetString, PackageIds.NewTempProjectCommandId, null, null);
-
             var e = Activator.CreateInstance(types.WorkflowCompletedEventArgs, "Get To Code workflow", "After open solution");
             types.GetToCodeWorkflowViewModel_RaiseCompleted.Invoke(currentWorkflow, new object[] { e });
         }
