@@ -5,6 +5,7 @@ using Microsoft;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.PlatformUI;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
@@ -17,11 +18,12 @@ namespace TemporaryProjects
     [ProvideAutoLoad(getToCodeUIContext, PackageAutoLoadFlags.None)]
     [ProvideUIContextRule(getToCodeUIContext,
         name: "GetToCodePackageExists",
-        expression: "GetToCodePackageExists",
-        termNames: new[] { "GetToCodePackageExists" },
+        expression: "GetToCodePackageExists & GitSccProvider",
+        termNames: new[] { "GetToCodePackageExists", "GitSccProvider" },
         termValues: new[]
         {
-            @"ConfigSettingsStoreQuery:Packages\{D208A515-B37C-4F88-AC23-F3727FE307BD}\AllowsBackgroundLoad"
+            @"ConfigSettingsStoreQuery:Packages\{D208A515-B37C-4F88-AC23-F3727FE307BD}\AllowsBackgroundLoad",
+            "11B8E6D7-C08B-4385-B321-321078CDD1F8"
         })]
     public sealed class GetToCodeExtenderPackage : Package
     {
@@ -58,7 +60,7 @@ namespace TemporaryProjects
                     var newAction = types.GetToCodeAction_Constructor.Invoke(new object[]
                     {
                         KnownMonikers.NewTestGroup,
-                        "Create a new temporary project", "Bing bada bing!",
+                        "Create a new temporary project", "",
                         new DelegateCommand(_ => OnOpenTempProjectCommandExecuted(types, currentWorkflow), _ => true)
                     });
 
