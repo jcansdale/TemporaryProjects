@@ -13,6 +13,8 @@ namespace TemporaryProjects
 
         private NewTempProjectCommand(IMenuCommandService commandService, DTE dte)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             this.dte = dte;
 
             var menuCommandID = new CommandID(PackageGuids.guidNewTempProjectCommandPackageCmdSet, PackageIds.NewTempProjectCommandId);

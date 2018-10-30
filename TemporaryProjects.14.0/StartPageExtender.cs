@@ -17,6 +17,8 @@ namespace TemporaryProjects
         [STAThread]
         public static void Initialize(IVsUIShell7 vsUIShell)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
+
             ReadviseWindowFrameEvents(vsUIShell);
         }
 
