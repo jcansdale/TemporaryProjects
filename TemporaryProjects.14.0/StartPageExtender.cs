@@ -10,18 +10,19 @@ namespace TemporaryProjects
 {
     internal sealed class StartPageExtender : IVsWindowFrameEvents
     {
-        private readonly DTE dte;
         private const string CookieName = "TemporaryProjects.StartPageExtender.Cookie";
 
         // You can test this in the current Visual Studio instance like this:
         // https://github.com/jcansdale/TestDriven.Net-Issues/wiki/Test-With...VS-SDK
         [STAThread]
-        public static void Initialize(IVsUIShell7 vsUIShell, DTE dte)
+        public static void Initialize(IVsUIShell7 vsUIShell)
         {
-            ReadviseWindowFrameEvents(vsUIShell, dte);
+            ThreadHelper.ThrowIfNotOnUIThread();
+
+            ReadviseWindowFrameEvents(vsUIShell);
         }
 
-        private static void ReadviseWindowFrameEvents(IVsUIShell7 vsUIShell, DTE dte)
+        private static void ReadviseWindowFrameEvents(IVsUIShell7 vsUIShell)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
@@ -32,7 +33,7 @@ namespace TemporaryProjects
                 vsUIShell.UnadviseWindowFrameEvents(cookie);
             }
 
-            Cookie = vsUIShell.AdviseWindowFrameEvents(new StartPageExtender(dte, (IVsUIShell)vsUIShell));
+            Cookie = vsUIShell.AdviseWindowFrameEvents(new StartPageExtender((IVsUIShell)vsUIShell));
         }
 
         // Store cookie in app domain wide variable because assembly might be loaded multiple times while testing.
@@ -42,11 +43,9 @@ namespace TemporaryProjects
             set => AppDomain.CurrentDomain.SetData(CookieName, value);
         }
 
-        private StartPageExtender(DTE dte, IVsUIShell vsUIShell)
+        private StartPageExtender(IVsUIShell vsUIShell)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-
-            this.dte = dte;
 
             if (ErrorHandler.Succeeded(vsUIShell.FindToolWindow(
                     (uint)__VSFINDTOOLWIN.FTW_fFrameOnly, VSConstants.StandardToolWindows.StartPage, out var windowFrame)) &&
@@ -154,9 +153,10 @@ namespace TemporaryProjects
 
         private void AddNewTemporaryProjectButton(Grid recentProjectsPanel)
         {
-            var button = new NewTemporaryProjectButton(dte)
+            var button = new NewTemporaryProjectButton()
             {
-                Style = ((Button)recentProjectsPanel.FindName("MoreTemplatesButton")).Style
+                Style = ((Button)recentProjectsPanel.FindName("MoreTemplatesButton")).Style,
+                Command = new NewTempProjectUiCommand()
             };
 
             recentProjectsPanel.RowDefinitions.Add(new RowDefinition() { Height = GridLength.Auto });
@@ -167,28 +167,12 @@ namespace TemporaryProjects
 
         private sealed class NewTemporaryProjectButton : Button
         {
-            private readonly DTE dte;
-
-            public NewTemporaryProjectButton(DTE dte)
-            {
-                this.dte = dte;
-            }
-
             public override void OnApplyTemplate()
             {
                 base.OnApplyTemplate();
 
                 var textBlock = (TextBlock)GetTemplateChild("MoreTemplatesText");
                 textBlock.Text = "Create new temporary project...";
-            }
-
-            protected override void OnClick()
-            {
-                ThreadHelper.ThrowIfNotOnUIThread();
-
-                base.OnClick();
-
-                dte.Commands.Raise(PackageGuids.guidNewTempProjectCommandPackageCmdSetString, PackageIds.NewTempProjectCommandId, null, null);
             }
         }
     }
