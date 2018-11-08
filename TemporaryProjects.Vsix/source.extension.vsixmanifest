@@ -3,8 +3,7 @@
     <Metadata>
         <Identity Id="TemporaryProjects.530d4cf0-0e05-449f-945b-d14dcf6eb95d" Version="|%CurrentProject%;GetBuildVersion|" Language="en-US" Publisher="Jamie Cansdale" />
         <DisplayName>Temporary Projects</DisplayName>
-        <Description xml:space="preserve">Add `File &gt; New &gt; Temporary Project...` command to create a projects in a temporary directory.
-</Description>
+        <Description xml:space="preserve">Add `File &gt; New &gt; Temporary Project...` command to create a projects in a temporary directory.</Description>
         <MoreInfo>https://github.com/jcansdale/TemporaryProjects</MoreInfo>
         <Icon>Resources\NewTempProjectCommandPackage.ico</Icon>
     </Metadata>
@@ -18,6 +17,6 @@
         <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="TemporaryProjects.14.0" Path="|TemporaryProjects.14.0;PkgdefProjectOutputGroup|" />
     </Assets>
     <Prerequisites>
-        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[16.0,)" DisplayName="Visual Studio core editor" />
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[14.0,)" DisplayName="Visual Studio core editor" />
     </Prerequisites>
 </PackageManifest>
