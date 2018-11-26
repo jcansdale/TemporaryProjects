@@ -1,7 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.ComponentModel.Design;
 using EnvDTE;
+using Microsoft;
 using Microsoft.VisualStudio.Shell;
 using Task = System.Threading.Tasks.Task;
 
@@ -11,13 +11,24 @@ namespace TemporaryProjects
     {
         readonly DTE dte;
 
-        private NewTempProjectCommand(IMenuCommandService commandService, DTE dte)
-        {
-            this.dte = dte;
 
+        NewTempProjectCommand(IMenuCommandService commandService, DTE dte) : this(dte)
+        {
             var menuCommandID = new CommandID(PackageGuids.guidNewTempProjectCommandPackageCmdSet, PackageIds.NewTempProjectCommandId);
-            var menuItem = new MenuCommand((s, e) => Execute(dte), menuCommandID);
+            var menuItem = new MenuCommand((s, e) => Execute(), menuCommandID);
             commandService.AddCommand(menuItem);
+        }
+
+        NewTempProjectCommand() : this(ServiceProvider.GlobalProvider.GetService(typeof(DTE)) as DTE)
+        {
+            ThreadHelper.ThrowIfNotOnUIThread();
+        }
+
+
+        NewTempProjectCommand(DTE dte)
+        {
+            Assumes.Present(dte);
+            this.dte = dte;
         }
 
         public static async Task InitializeAsync(AsyncPackage package)
@@ -32,23 +43,23 @@ namespace TemporaryProjects
         // You can test this command in the current VS instance like this:
         // https://github.com/jcansdale/TestDriven.Net-Issues/wiki/Test-With...VS-SDK
         [STAThread]
-        static void Execute(DTE dte)
+        void Execute()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            var projectsLocation = dte.Properties["Environment", "ProjectsAndSolution"].Item("ProjectsLocation");
-            var location = (string)projectsLocation.Value;
-            var tempPath = string.Format(@"Temp\{0:yyyy-MM-dd}\", DateTime.Now);
-            var tempLocation = Path.Combine(location, tempPath);
-
+            var saveNewProjects = dte.Properties["Environment", "ProjectsAndSolution"].Item("SaveNewProjects");
+            var oldValue = saveNewProjects.Value;
             try
             {
-                projectsLocation.Value = tempLocation;
-                dte.ExecuteCommand("File.NewProject");
+                using (new TempProjectLocationContext(dte))
+                {
+                    saveNewProjects.Value = false;
+                    dte.ExecuteCommand("File.NewProject");
+                }
             }
             finally
             {
-                projectsLocation.Value = location;
+                saveNewProjects.Value = oldValue;
             }
         }
 
