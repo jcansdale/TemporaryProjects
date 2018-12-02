@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.ComponentModel.Design;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
@@ -9,12 +8,8 @@ namespace TemporaryProjects
 {
     internal sealed class NewTempProjectCommand
     {
-        readonly DTE dte;
-
         private NewTempProjectCommand(IMenuCommandService commandService, DTE dte)
         {
-            this.dte = dte;
-
             var menuCommandID = new CommandID(PackageGuids.guidNewTempProjectCommandPackageCmdSet, PackageIds.NewTempProjectCommandId);
             var menuItem = new MenuCommand((s, e) => Execute(dte), menuCommandID);
             commandService.AddCommand(menuItem);
@@ -35,20 +30,9 @@ namespace TemporaryProjects
         static void Execute(DTE dte)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-
-            var projectsLocation = dte.Properties["Environment", "ProjectsAndSolution"].Item("ProjectsLocation");
-            var location = (string)projectsLocation.Value;
-            var tempPath = string.Format(@"Temp\{0:yyyy-MM-dd}\", DateTime.Now);
-            var tempLocation = Path.Combine(location, tempPath);
-
-            try
+            using (new TempProjectsLocationContext(dte))
             {
-                projectsLocation.Value = tempLocation;
                 dte.ExecuteCommand("File.NewProject");
-            }
-            finally
-            {
-                projectsLocation.Value = location;
             }
         }
 
